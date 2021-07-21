@@ -13,21 +13,29 @@ module "alb" {
 
   target_groups = [
     {
-      name             = "target-group"
+      name_prefix      = "pref-"
       backend_protocol = "HTTP"
       backend_port     = 80
       target_type      = "instance"
-      health_check = {
-        enabled             = true
-        interval            = 110
-        path                = "/drupal"
-        port                = "traffic-port"
-        healthy_threshold   = 3
-        unhealthy_threshold = 3
-        timeout             = 100
-        protocol            = "HTTP"
-        matcher             = "200-399"
-      }
+      targets = [
+        {
+          target_id = "i-0123456789abcdefg"
+          port = 80
+        },
+        {
+          target_id = "i-a1b2c3d4e5f6g7h8i"
+          port = 8080
+        }
+      ]
+    }
+  ]
+
+  https_listeners = [
+    {
+      port               = 443
+      protocol           = "HTTPS"
+      certificate_arn    = "arn:aws:iam::123456789012:server-certificate/test_cert-123456789012"
+      target_group_index = 0
     }
   ]
 
@@ -36,9 +44,13 @@ module "alb" {
       port               = 80
       protocol           = "HTTP"
       target_group_index = 0
-      action_type        = "forward"
     }
   ]
+
+  tags = {
+    Environment = "Test"
+  }
+}
 
   tags = {
     Project = "terraform_drupal"
