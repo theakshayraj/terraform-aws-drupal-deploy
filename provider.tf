@@ -5,7 +5,7 @@ terraform {
 
 provider "aws" {
   region = var.region
-  profile = "terraform"
+  profile = "ttn"
 }
 
 # Not required: currently used in conjunction with using
