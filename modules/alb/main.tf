@@ -64,4 +64,3 @@ module "alb" {
 output "tg" {
   value = module.alb.target_group_arns
 }
-
