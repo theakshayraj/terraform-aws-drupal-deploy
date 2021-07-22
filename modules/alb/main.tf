@@ -13,7 +13,7 @@ module "alb" {
 
   target_groups = [
     {
-      #name             = "target-gp"
+      #name             = ""
       backend_protocol = "HTTP"
       backend_port     = 80
       target_type      = "instance"

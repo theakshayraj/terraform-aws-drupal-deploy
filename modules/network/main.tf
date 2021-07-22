@@ -72,7 +72,40 @@ module "security_group_asg" {
       protocol    = "tcp"
       description = "HTTP"
       cidr_blocks = "110.235.219.73/32"
-    }
+    },
+
+    {
+    description      = "Custom TCP"
+    from_port        = 9090
+    to_port          = 9090
+    protocol         = "tcp"
+    cidr_blocks      = "0.0.0.0/0"
+    },
+
+    {
+    description      = "Custom TCP"
+    from_port        = 3000
+    to_port          = 3000
+    protocol         = "tcp"
+    cidr_blocks      = "0.0.0.0/0"
+    },
+
+   {
+    description      = "Custom TCP"
+    from_port        = 9093
+    to_port          = 9093
+    protocol         = "tcp"
+    cidr_blocks      = "0.0.0.0/0"
+   },
+
+
+   {
+    description      = "Custom TCP"
+    from_port        = 9100
+    to_port          = 9100
+    protocol         = "tcp"
+    cidr_blocks      = "0.0.0.0/0"
+   }
   ]
 }
 

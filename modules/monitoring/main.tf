@@ -1,15 +1,3 @@
-terraform {
-  required_providers {
-    aws = {
-      source = "hashicorp/aws"
-    }
-  }
-}
-
-provider "aws" {
-   region = "ap-south-1"
-}
-
 resource "aws_security_group" "allow_ports" {
   name        = "allow_tls"
   description = "Allow TLS inbound traffic"
@@ -77,11 +65,11 @@ resource "aws_security_group" "allow_ports" {
 }
 
 resource "aws_instance" "terraform-test-2" {
-	ami = "ami-00bf4ae5a7909786c"
+	ami = "ami-0dc2d3e4c0f9ebd18"
 	instance_type = "t2.micro"
-	user_data = file("user-data.sh")
+	user_data = file("./modules/monitoring/user-data.sh")
     subnet_id = var.subnet_monitoring_instance
-    vpc_security_group_ids = [aws_security_group.allow_ports.id]
+    vpc_security_group_ids = [var.vpc_security_group_monitoring]
     tags = {
 		Name = "Terraform"
 	}
