@@ -2,6 +2,24 @@ locals {
   name = "group-asg"
 }
 
+# generate key-pair for launch template
+resource "tls_private_key" "dev_key" {
+  algorithm = "RSA"
+  rsa_bits  = 4096
+}
+
+resource "aws_key_pair" "generated_key" {
+  key_name   = "instance-key"
+  public_key = tls_private_key.dev_key.public_key_openssh
+
+  provisioner "local-exec" {    
+    command = "echo '${tls_private_key.dev_key.private_key_pem}' > ./instance-key.pem"
+  }
+
+  provisioner "local-exec" {
+    command = "chmod 400 ./instance-key.pem"
+  }
+}
 module "aws_autoscaling_group" {
   #source = "git@github.com:terraform-aws-modules/terraform-aws-autoscaling.git?ref=v4.1.0"
 
@@ -34,7 +52,8 @@ module "aws_autoscaling_group" {
 
   image_id      = "ami-0dc2d3e4c0f9ebd18"
   instance_type = "t2.micro"
-  #key_name      = "group-testing"
+
+  key_name      = "instance-key"
   #user_data_base64 = base64encode(local.user_data)
   user_data_base64 = base64encode(templatefile("${path.module}/userdata.sh", {
     rds_endpt = var.rds_point
