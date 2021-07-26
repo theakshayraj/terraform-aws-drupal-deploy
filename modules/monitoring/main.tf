@@ -15,11 +15,11 @@ resource "aws_s3_bucket" "grafana-files-sg" {
 }
 
 resource "aws_s3_bucket_object" "objects" {
-  for_each = fileset("./module/data/grafana-files", "*")
+  for_each = fileset("./modules/monitoring/data/grafana-files", "*")
   bucket = aws_s3_bucket.grafana-files-sg.id
   key = each.value
-  source = "./module/data/grafana-files/${each.value}"
-  etag = md5("./module/data/grafana-files/${each.value}")
+  source = "./modules/monitoring/data/grafana-files/${each.value}"
+  etag = md5("./modules/monitoring/data/grafana-files/${each.value}")
 }
 
 resource "aws_key_pair" "generated_key" {
@@ -102,7 +102,7 @@ resource "aws_security_group" "allow_ports" {
 
 resource "aws_iam_role" "ec2_cw_access_role" {
   name               = "ec2_cw_access_role"
-  assume_role_policy = file("./module/data/assume_role_policy.json")
+  assume_role_policy = file("./modules/monitoring/data/assume_role_policy.json")
 }
 
 resource "aws_iam_instance_profile" "cw_profile" {
@@ -114,13 +114,13 @@ resource "aws_iam_instance_profile" "cw_profile" {
 resource "aws_iam_policy" "cw-metric-policy" {
   name        = "cw-metric-policy"
   description = "A policy for cloudwatch metrics"
-  policy      = file("./module/data/cw-policy.json")
+  policy      = file("./modules/monitoring/data/cw-policy.json")
 }
 
 resource "aws_iam_policy" "s3-policy" {
   name        = "s3-policy"
   description = "A policy for s3 object download"
-  policy      = file("./module/data/s3-policy.json")
+  policy      = file("./modules/monitoring/data/s3-policy.json")
 }
 
 resource "aws_iam_policy_attachment" "cw-attach" {
