@@ -6,15 +6,15 @@ sudo systemctl stop nginx.service
 sudo systemctl start nginx.service
 sudo systemctl enable nginx.service
 
-sudo yum install mariadb-server mariadb-client -y
-sudo systemctl stop mariadb.service
-sudo systemctl start mariadb.service
-sudo systemctl enable mariadb.service
+#sudo yum install mariadb-server mariadb-client -y
+#sudo systemctl stop mariadb.service
+#sudo systemctl start mariadb.service
+#sudo systemctl enable mariadb.service
 
 sudo amazon-linux-extras install -y php7.2
 sudo yum install -y php-dom php-gd php-simplexml php-xml php-opcache php-mbstring php-pgsql
-
-sudo mysql -u root -pdrupalpass -e "CREATE DATABASE drupal; CREATE USER 'drupaluser'@'localhost' IDENTIFIED BY 'drupalpass'; GRANT ALL  ON drupal.* TO 'drupaluser'@'localhost' IDENTIFIED BY 'drupalpass' WITH GRANT OPTION; FLUSH PRIVILEGES; EXIT;"
+x=$(echo "${rds_endpt}" | cut -d':' -f1)
+sudo mysql -u root -pdrupalpass "$x" -e "CREATE DATABASE drupal; CREATE USER 'drupaluser'@'localhost' IDENTIFIED BY 'drupalpass'; GRANT ALL  ON drupal.* TO 'drupaluser'@'localhost' IDENTIFIED BY 'drupalpass' WITH GRANT OPTION; FLUSH PRIVILEGES; EXIT;"
 
 cd /tmp && wget https://ftp.drupal.org/files/projects/drupal-8.3.7.tar.gz
 sudo tar -zxvf drupal*.gz -C /usr/share/nginx/html/ 
