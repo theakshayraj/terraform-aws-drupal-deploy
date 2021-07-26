@@ -9,7 +9,7 @@ locals {
 
 module "terraform-aws-rds-source" {
   #source = "git@github.com:terraform-aws-modules/terraform-aws-rds.git?ref=v3.0.0"
-  
+
   source  = "terraform-aws-modules/rds/aws"
   version = "3.0.0"
 
@@ -23,8 +23,8 @@ module "terraform-aws-rds-source" {
   max_allocated_storage = 100
 
   name     = "mydb_source"
-  username = "drupaladmin"
-  password = "redhat22"
+  username = var.db_username
+  password = var.db_password 
   port     = 3306
 
   parameter_group_name      = "default.mysql5.7"
@@ -47,7 +47,7 @@ output "rds_endpoint" {
 
 module "terraform-aws-rds-read" {
   #source = "git@github.com:terraform-aws-modules/terraform-aws-rds.git?ref=v3.0.0"
-  
+
   source  = "terraform-aws-modules/rds/aws"
   version = "3.0.0"
 

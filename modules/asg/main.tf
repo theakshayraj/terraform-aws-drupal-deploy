@@ -12,7 +12,7 @@ resource "aws_key_pair" "generated_key" {
   key_name   = "instance-key"
   public_key = tls_private_key.dev_key.public_key_openssh
 
-  provisioner "local-exec" {    
+  provisioner "local-exec" {
     command = "echo '${tls_private_key.dev_key.private_key_pem}' > ./instance-key.pem"
   }
 
@@ -20,8 +20,8 @@ resource "aws_key_pair" "generated_key" {
     command = "chmod 400 ./instance-key.pem"
   }
 }
+
 module "aws_autoscaling_group" {
-  #source = "git@github.com:terraform-aws-modules/terraform-aws-autoscaling.git?ref=v4.1.0"
 
   source  = "terraform-aws-modules/autoscaling/aws"
   version = "4.1.0"
@@ -29,10 +29,10 @@ module "aws_autoscaling_group" {
   # Autoscaling group
   name = "group-testing"
 
-  min_size                  = 1
-  max_size                  = 5
-  desired_capacity          = 2
-  wait_for_capacity_timeout = "5m"
+  min_size                  = var.min_size_asg
+  max_size                  = var.max_size_asg
+  desired_capacity          = var.des_cap_asg
+  wait_for_capacity_timeout = var.cap_timeout
   health_check_type         = "EC2"
   vpc_zone_identifier       = var.subnet_asg
   security_groups           = [var.sec_group_asg]
@@ -45,16 +45,15 @@ module "aws_autoscaling_group" {
   }
 
   # Launch template
-  lt_name     = "foobar"
-  description = "Complete launch template example"
+  lt_name     = var.temp_name
+  description = var.temp_desc
   use_lt      = true
   create_lt   = true
 
-  image_id      = "ami-0dc2d3e4c0f9ebd18"
-  instance_type = "t2.micro"
+  image_id      = var.img_id
+  instance_type = var.ami_type
 
   key_name      = "instance-key"
-  #user_data_base64 = base64encode(local.user_data)
   user_data_base64 = base64encode(templatefile("${path.module}/userdata.sh", {
     rds_endpt = var.rds_point
   }))

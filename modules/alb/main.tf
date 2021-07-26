@@ -1,5 +1,4 @@
 module "alb" {
-  #source = "git@github.com:terraform-aws-modules/terraform-aws-alb.git?ref=v6.0.0"
 
   source  = "terraform-aws-modules/alb/aws"
   version = "6.0.0"
