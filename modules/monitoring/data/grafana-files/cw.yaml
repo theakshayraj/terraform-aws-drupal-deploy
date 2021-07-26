@@ -4,7 +4,7 @@ datasources:
     type: cloudwatch
     jsonData:
       authType: default
-      defaultRegion: ap-south-1
+      defaultRegion: us-east-1
       customMetricsNamespaces: 'CWAgent'
     secureJsonData:
       accessKey: $ACCESS_KEY
