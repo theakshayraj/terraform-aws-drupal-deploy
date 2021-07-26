@@ -5,6 +5,17 @@ module "db" {
   subnet_rds    = module.network.public_sn_asg
   db_username   = var.db_user
   db_password   = var.db_pass
+  identifier_rds = var.rds_identifier
+  engine_rds  = var.rds_engine
+  engine_ver_rds = var.rds_engine_ver
+  instance_class_rds = var.rds_instance_class
+  aloc_strg = var.db_allocated_storage
+  max_aloc_strg = var.db_max_allocated_storage
+  port_db = var.db_port
+  family = var.db_parameter_group
+  master_db_name = var.db_mastername
+  maintenance = var.db_maintenance_window
+  backup = var.db_backup_window
 }
 
 module "asg" {
@@ -26,6 +37,10 @@ module "asg" {
 
 module "network" {
   source = "./modules/network/"
+  cidr_vpc = var.vpc_cidr
+  az_vpc = var.vpc_azs
+  pub_sub_vpc = var.vpc_public_subnets
+  pri_sub_vpc = var.vpc_private_subnets
 }
 
 module "alb" {

@@ -1,6 +1,5 @@
-
 locals {
-  name = "complete-mysql"
+  name = var.identifier_rds
   tags = {
     Owner       = "user"
     Environment = "dev"
@@ -8,33 +7,32 @@ locals {
 }
 
 module "terraform-aws-rds-source" {
-  #source = "git@github.com:terraform-aws-modules/terraform-aws-rds.git?ref=v3.0.0"
 
   source  = "terraform-aws-modules/rds/aws"
   version = "3.0.0"
 
-  identifier = "mysql-group-source"
+  identifier = "${local.name}-master"
 
-  engine         = "mysql"
-  engine_version = "5.7"
-  instance_class = "db.t2.micro"
+  engine         = var.engine_rds
+  engine_version = var.engine_ver_rds
+  instance_class = var.instance_class_rds
 
-  allocated_storage     = 50
-  max_allocated_storage = 100
+  allocated_storage     = var.aloc_strg
+  max_allocated_storage = var.max_aloc_strg
 
-  name     = "mydb_source"
+  name     = var.master_db_name
   username = var.db_username
-  password = var.db_password 
-  port     = 3306
+  password = var.db_password
+  port     = var.port_db
 
-  parameter_group_name      = "default.mysql5.7"
+  parameter_group_name      = var.family
   create_db_parameter_group = false
   create_db_option_group    = false
 
-  maintenance_window = "Sun:05:00-Sun:06:00"
-  backup_window      = "09:46-10:16"
+  maintenance_window = var.maintenance
+  backup_window      = var.backup
 
-  backup_retention_period = 10
+  backup_retention_period = 1
   skip_final_snapshot     = true
 
   subnet_ids             = var.subnet_rds
@@ -46,37 +44,36 @@ output "rds_endpoint" {
 }
 
 module "terraform-aws-rds-read" {
-  #source = "git@github.com:terraform-aws-modules/terraform-aws-rds.git?ref=v3.0.0"
 
   source  = "terraform-aws-modules/rds/aws"
   version = "3.0.0"
 
-  identifier = "mysql-group-read"
+  identifier = "${local.name}-replica"
 
-  engine         = "mysql"
-  engine_version = "5.7"
-  instance_class = "db.t2.micro"
+  engine         = var.engine_rds
+  engine_version = var.engine_ver_rds
+  instance_class = var.instance_class_rds
 
-  allocated_storage     = 50
-  max_allocated_storage = 100
+  allocated_storage     = var.aloc_strg
+  max_allocated_storage = var.max_aloc_strg
 
   # Username and password should not be set for replicas
-  name     = "mydb_read"
+  #name     = "mydb_read"
   username = null
   password = null
-  port     = 3306
+  port     = var.port_db
 
-  parameter_group_name      = "default.mysql5.7"
+  parameter_group_name      = var.family
   create_db_parameter_group = false
   create_db_option_group    = false
 
-  maintenance_window = "Sun:05:00-Sun:06:00"
-  backup_window      = "09:46-10:16"
+  maintenance_window = var.maintenance
+  backup_window      = var.backup
 
   #for read replica
   replicate_source_db = module.terraform-aws-rds-source.db_instance_id
 
-  backup_retention_period = 10
+  backup_retention_period = 1
   skip_final_snapshot     = true
 
   create_db_subnet_group = false
