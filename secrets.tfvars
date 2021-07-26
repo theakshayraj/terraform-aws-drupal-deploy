@@ -1,0 +1,5 @@
+access_key = "admin"
+secret_key = "insecurepassword"
+region = "us-east-1"
+db_user = "drupaladmin"
+db_pass = "redhat22"

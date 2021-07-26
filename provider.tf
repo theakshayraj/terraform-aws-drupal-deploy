@@ -6,6 +6,8 @@ terraform {
 provider "aws" {
   region = var.region
   profile = "ttn"
+  access_key = var.access_key
+  secret_key = var.secret_key
 }
 
 # Not required: currently used in conjunction with using
