@@ -1,4 +1,3 @@
-
 <img align="left" alt="Drupal Logo" src="https://www.drupal.org/files/Wordmark_blue_RGB.png" height="60px">
 <img align="right" alt="Terraform" src="https://www.terraform.io/assets/images/logo-hashicorp-3f10732f.svg"  width="300">
 <p align="center"><img align="middle" width="160" height="96" alt="AWS" src="https://user-images.githubusercontent.com/42437393/126828661-63749f56-2bd4-4447-9225-f41dd737025b.png"></p>
@@ -12,6 +11,12 @@
 
 <a href="https://img.shields.io/badge/aws-v3.37.0-FF9900">
 <img src="https://img.shields.io/badge/aws-v3.37.0-FF9900" /></a>
+
+
+<img align="left" alt="Drupal Logo" src="https://www.drupal.org/files/Wordmark_blue_RGB.png" height="60px">
+<img align="right" alt="Terraform" src="https://www.terraform.io/assets/images/logo-hashicorp-3f10732f.svg"  width="300">
+<p align="center"><img align="middle" width="160" height="96" alt="AWS" src="https://user-images.githubusercontent.com/42437393/126828661-63749f56-2bd4-4447-9225-f41dd737025b.png"></p>
+<br>
 
 <a href="https://img.shields.io/badge/terraform-v0.15.0-844FBA">
 <img src="https://img.shields.io/badge/terraform-v0.15.0-844FBA" /></a>
@@ -65,7 +70,9 @@ Out-of-box integration with load balancing and performance monitoring to be able
 
 
 #### The different areas taken into account involves:
+
 -  Application Load Balancer with Autoscaling
+
 -  MySql Database
 -  Monitoring using Prometheus and Grafana
 
@@ -74,7 +81,9 @@ Also, a dedicated module named Network aims to provide desired information to im
 ## Requirements
 
 -  Install Terraform
+
 - Sign up for AWS
+
 - A valid AMI, followed by next section
 
 ## AMI
@@ -213,6 +222,135 @@ an Auto Scaling group and is responding to a spike in load. If the instance take
 
 ```
 
+# Terraform Modules
+
+> A curated help menu of terraform modules used in the project.
+
+[**Module 1**](#mod1): Autoscaling
+
+[**Module 2**](#mod2): Application Load Balancer
+
+[**Module 3**](#mod3): Database
+
+[**Module 4**](#mod4): Network Configurations
+
+<a id='mod1'></a>
+## Module 1: Autoscaling
+
+
 
 ```
 </details>
+=======
+### Terraform module which creates autoscaling resources on AWS with launch template
+
+<details>
+  <summary><b>Variables</b></summary>
+  
+```
+
+```
+</details>
+
+<details>
+  <summary><b>Constants</b></summary>
+  
+```
+
+```
+</details>
+
+<a id='mod2'></a>
+## Module 2: Application Load Balancer
+
+
+### Terraform module which creates Application load balancer on AWS
+
+<details>
+  <summary><b>Variables</b></summary>
+  
+```
+   
+```
+</details>
+
+<details>
+  <summary><b>Constants</b></summary>
+  
+```
+
+```
+</details>
+
+<details>
+  <summary><b>Outputs</b></summary>
+  
+```
+
+```
+</details>
+
+<a id='mod3'></a>
+## Module 3: Database
+
+
+
+### Terraform module which creates RDS resources on AWS and reads from it
+
+<details>
+  <summary><b>Variables</b></summary>
+  
+```
+  
+```
+</details>
+
+<details>
+  <summary><b>Constants</b></summary>
+  
+```
+
+```
+</details>
+
+<details>
+  <summary><b>Outputs</b></summary>
+  
+```
+
+```
+</details>
+
+
+<a id='mod4'></a>
+## Module 4: Network Configurations
+
+
+### Terraform module which create VPC, security groups for auto scaling groups and RDS on AWS
+
+<details>
+  <summary><b>Variables</b></summary>
+ 
+  ```
+ 
+ ```
+</details>
+
+<details>
+  <summary><b>Constants</b></summary>
+  
+  ```
+ 
+  ```
+
+</details>
+
+<details>
+  <summary><b>Outputs</b></summary>
+  
+```
+ 
+
+```
+</details>
+

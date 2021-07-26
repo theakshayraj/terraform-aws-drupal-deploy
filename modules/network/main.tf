@@ -43,21 +43,21 @@ module "security_group_asg" {
       to_port     = 80
       protocol    = "tcp"
       description = "HTTP"
-      cidr_blocks = "110.235.219.73/32"
+      cidr_blocks = "0.0.0.0/0"
     },
     {
       from_port   = 22
       to_port     = 22
       protocol    = "tcp"
       description = "SSH"
-      cidr_blocks = "110.235.219.73/32"
+      cidr_blocks = "0.0.0.0/0"
     },
     {
       from_port   = 2049
       to_port     = 2049
       protocol    = "tcp"
       description = "NFS"
-      cidr_blocks = "110.235.219.73/32"
+      cidr_blocks = "0.0.0.0/0"
     },
     {
       from_port   = 0
@@ -71,7 +71,7 @@ module "security_group_asg" {
       to_port     = 8080
       protocol    = "tcp"
       description = "HTTP"
-      cidr_blocks = "110.235.219.73/32"
+      cidr_blocks = "0.0.0.0/0"
     },
 
     {
@@ -131,7 +131,7 @@ module "security_group_rds" {
       to_port     = 65535
       protocol    = "tcp"
       description = "All TCP"
-      cidr_blocks = "110.235.219.73/32"
+      cidr_blocks = "0.0.0.0/0"
     }
   ]
 
