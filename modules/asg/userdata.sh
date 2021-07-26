@@ -77,3 +77,8 @@ sudo echo "user nginx;
 	}" >> /etc/nginx/nginx.conf
 
 sudo systemctl restart nginx
+sudo yum install -y amazon-cloudwatch-agent
+sudo aws s3 cp s3://grafana-files-sg/cw-config.json /opt/aws/amazon-cloudwatch-agent/bin/config.json
+sudo mkdir -p /usr/share/collectd
+sudo touch /usr/share/collectd/types.db
+sudo /opt/aws/amazon-cloudwatch-agent/bin/amazon-cloudwatch-agent-ctl -a fetch-config -m ec2 -s -c file:/opt/aws/amazon-cloudwatch-agent/bin/config.json
