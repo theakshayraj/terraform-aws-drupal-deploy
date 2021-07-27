@@ -32,34 +32,34 @@
 
 <br/>
 
-Drupal :- Drupal is an open source content management platform supporting a variety of
+**Drupal** :- Drupal is an open source content management platform supporting a variety of
 websites ranging from personal weblogs to large community-driven websites. For
 more information, visit the Drupal website, [Drupal.org][Drupal.org], and join
 the [Drupal community][Drupal community].
 
-Terraform:-Terraform is a tool for building, changing, and versioning infrastructure safely and efficiently.
+**Terraform** :-Terraform is a tool for building, changing, and versioning infrastructure safely and efficiently.
 
-AWS:- Deploying Drupal on AWS makes it easy to use AWS services to further enhance the performance and extend functionality of your content management framework.
+**AWS**:- Deploying Drupal on AWS makes it easy to use AWS services to further enhance the performance and extend functionality of your content management framework.
 
 The goal of this project is to host Drupal site on AWS via Terraform  it's a cross-platform, extensible tool that codifies APIs into declarative configuration files that can be shared amongst team members, treated as code, edited, reviewed, and versioned.
 
 
 ## What are we trying to implement?
 
-A virtual private cloud (VPC) that is configured across two Availability Zones. For each Availability Zone, this Quick Start provisions one public subnet and one private subnet, according to AWS best practices.
+- A virtual private cloud (VPC) that is configured across two Availability Zones. For each Availability Zone, this Quick Start provisions one public subnet and one private subnet, according to AWS best practices.
 
-In the public subnets, Linux bastion hosts in an AWS Auto Scaling group to provide secure access to allow inbound Secure Shell (SSH) access to Amazon EC2 instances in the private subnets.
+- In the public subnets, Linux bastion hosts in an AWS Auto Scaling group to provide secure access to allow inbound Secure Shell (SSH) access to Amazon EC2 instances in the private subnets.
 
-In the public subnets, managed network address translation (NAT) gateways to provide outbound internet connectivity for instances in the private subnets.
+- In the public subnets, managed network address translation (NAT) gateways to provide outbound internet connectivity for instances in the private subnets.
 
-In the private subnets, a web server instance (Amazon Machine Image, or AMI) in an AWS Auto Scaling group to host the Drupal servers and Amazon Aurora database instances.
+- In the private subnets, a web server instance (Amazon Machine Image, or AMI) in an AWS Auto Scaling group to host the Drupal servers and Amazon Aurora database instances.
 
-AWS Auto Scaling, which allows the Drupal cluster to add or remove servers based on use.
+- AWS Auto Scaling, which allows the Drupal cluster to add or remove servers based on use.
 Integration of AWS Auto Scaling with Elastic Load Balancing, which automatically adds and removes instances from the load balancer. The default installation sets up low and high CPU-based thresholds for scaling the instance capacity up or down.
 
-An AWS Identity and Access Management (IAM) role to enable AWS resources created through the Quick Start to access other AWS resources when required.
+- An AWS Identity and Access Management (IAM) role to enable AWS resources created through the Quick Start to access other AWS resources when required.
 
-Out-of-box integration with load balancing and performance monitoring to be able to tune for cost/performance.
+- Out-of-box integration with load balancing and performance monitoring to be able to tune for cost/performance.
 
 
 
