@@ -96,7 +96,7 @@ module "aws_autoscaling_group" {
   use_lt      = true
   create_lt   = true
 
-  image_id      = "ami-0dc2d3e4c0f9ebd18"
+  image_id      = var.img_id
   instance_type = "t2.micro"
   key_name      = "instance-key"
   iam_instance_profile_arn = aws_iam_instance_profile.drupal-grp_profile.arn

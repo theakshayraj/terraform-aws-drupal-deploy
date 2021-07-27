@@ -14,3 +14,6 @@ variable "target_gp" {
 
 }
 
+variable "img_id" {
+
+}
