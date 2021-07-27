@@ -1,0 +1,11 @@
+apiVersion: 1
+datasources:
+  - name: CW-data-source
+    type: cloudwatch
+    jsonData:
+      authType: default
+      defaultRegion: us-east-1
+      customMetricsNamespaces: 'CWAgent'
+    secureJsonData:
+      accessKey: $ACCESS_KEY
+      secretKey: $SECRET_KEY
