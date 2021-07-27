@@ -24,7 +24,7 @@ sudo systemctl enable nginx.service
 sudo yum install -y php php-{pear,cgi,common,curl,mbstring,gd,mysqlnd,gettext,bcmath,json,xml,fpm,intl,zip,imap}
 sudo yum install -y php-dom php-gd php-simplexml php-xml php-opcache php-mbstring php-pgsql
 x=$(echo "${rds_endpt}" | cut -d':' -f1)
-sudo mysql -u rootdrupalpass "$x" -e "CREATE DATABASE drupal; CREATE USER 'drupaluser'@'localhost' IDENTIFIED BY 'drupalpass'; GRANT ALL  ON drupal.* TO 'drupaluser'@'localhost' IDENTIFIED BY 'drupalpass' WITH GRANT OPTION; FLUSH PRIVILEGES; EXIT;"
+sudo mysql -u root -pdrupalpass "$x" -e "CREATE DATABASE drupal; CREATE USER 'drupaluser'@'localhost' IDENTIFIED BY 'drupalpass'; GRANT ALL  ON drupal.* TO 'drupaluser'@'localhost' IDENTIFIED BY 'drupalpass' WITH GRANT OPTION; FLUSH PRIVILEGES; EXIT;"
 
 cd /tmp && wget https://www.drupal.org/download-latest/tar.gz
 sudo tar -zxvf tar*.gz -C /usr/share/nginx/html/ 
