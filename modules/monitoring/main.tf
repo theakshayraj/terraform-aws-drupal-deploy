@@ -105,8 +105,8 @@ resource "aws_iam_role" "ec2_cw_access_role" {
   assume_role_policy = file("./modules/monitoring/data/assume_role_policy.json")
 }
 
-resource "aws_iam_instance_profile" "cw_profile" {
-  name = "cw_profile"
+resource "aws_iam_instance_profile" "cw-grp_profile" {
+  name = "cw-grp_profile"
   role = aws_iam_role.ec2_cw_access_role.name
 }
 
@@ -140,7 +140,7 @@ resource "aws_instance" "terraform-test-2" {
 	ami = "ami-0dc2d3e4c0f9ebd18"
 	instance_type = "t2.micro"
 	user_data = file("./modules/monitoring/user-data.sh")
-  iam_instance_profile = aws_iam_instance_profile.cw_profile.name
+  iam_instance_profile = aws_iam_instance_profile.cw-grp_profile.name
   key_name = "monitoring-key"
   subnet_id = var.subnet_monitoring_instance
   vpc_security_group_ids = [var.vpc_security_group_monitoring]

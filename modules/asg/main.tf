@@ -26,8 +26,8 @@ resource "aws_iam_role" "drupal_access_role" {
   assume_role_policy = file("./modules/asg/policies/assume_role_policy.json")
 }
 
-resource "aws_iam_instance_profile" "drupal_profile" {
-  name = "drupal_profile"
+resource "aws_iam_instance_profile" "drupal-grp_profile" {
+  name = "drupal-grp_profile"
   role = aws_iam_role.drupal_access_role.name
 }
 
@@ -89,7 +89,7 @@ module "aws_autoscaling_group" {
   image_id      = "ami-0dc2d3e4c0f9ebd18"
   instance_type = "t2.micro"
   key_name      = "instance-key"
-  iam_instance_profile_arn = aws_iam_instance_profile.drupal_profile.arn
+  iam_instance_profile_arn = aws_iam_instance_profile.drupal-grp_profile.arn
   #user_data_base64 = base64encode(local.user_data)
   user_data_base64 = base64encode(templatefile("${path.module}/userdata.sh", {
     rds_endpt = var.rds_point
