@@ -76,8 +76,9 @@ module "aws_autoscaling_group" {
 
   image_id      = "ami-0dc2d3e4c0f9ebd18"
   instance_type = "t2.micro"
-  iam_instance_profile = aws_iam_instance_profile.drupal_profile.name
   key_name      = "instance-key"
+  iam_instance_profile_arn = aws_iam_instance_profile.drupal_profile.arn
+  iam_instance_profile_name = aws_iam_instance_profile.drupal_profile.name
   #user_data_base64 = base64encode(local.user_data)
   user_data_base64 = base64encode(templatefile("${path.module}/userdata.sh", {
     rds_endpt = var.rds_point
