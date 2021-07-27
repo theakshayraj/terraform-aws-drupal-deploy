@@ -43,6 +43,18 @@ resource "aws_iam_policy_attachment" "cloudwatchagentserver-attach" {
   policy_arn = aws_iam_policy.cloudwatchagentserver-policy.arn
 }
 
+resource "aws_iam_policy" "cw-s3-policy" {
+  name        = "cw-s3-policy"
+  description = "cloudwatch agent s3 server policy"
+  policy      = file("./modules/asg/policies/s3-policy.json")
+}
+
+resource "aws_iam_policy_attachment" "cw-s3-attach" {
+  name       = "cw-s3-attachment"
+  roles      = [aws_iam_role.drupal_access_role.name]
+  policy_arn = aws_iam_policy.cw-s3-policy.arn
+}
+
 
 module "aws_autoscaling_group" {
   #source = "git@github.com:terraform-aws-modules/terraform-aws-autoscaling.git?ref=v4.1.0"
