@@ -1,0 +1,37 @@
+{
+  "builders": [
+    {
+      "access_key": "{{user `aws_access_key`}}",
+      "ami_groups": "all",
+      "ami_name": "packer-ami-{{timestamp}}",
+      "associate_public_ip_address": true,
+      "instance_type": "{{user `instance_type`}}",
+      "region": "{{user `vpc_region`}}",
+      "secret_key": "{{user `aws_secret_key`}}",
+      "ssh_username": "ec2-user",
+      "source_ami": "{{user `source_ami`}}",
+      "type": "amazon-ebs"
+    }
+  ],
+  "post-processors": [
+    {
+      "output": "manifest2.json",
+      "strip_path": true,
+      "type": "manifest"
+    }
+  ],
+  "provisioners": [
+    {
+      "script": "base_script.sh",
+      "type": "shell"
+    }
+  ],
+  "variables": {
+    "aws_access_key": "AKIA25V3",
+    "aws_secret_key": "fKcYJz1d5",
+    "instance_type": "t2.micro",
+    "vpc_region": "us-east-1",
+    "source_ami": "ami-0dc2d3e4c0f9ebd18"
+  }
+}
+
