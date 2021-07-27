@@ -48,6 +48,7 @@ data "aws_iam_policy" "CloudWatchAgentPolicy" {
 }
 
 resource "aws_iam_policy_attachment" "cloudwatch-agent-server-policy-attach" {
+  name =  "cloudwatch-agent-server-policy-attach"
   roles       = [aws_iam_role.drupal_access_role.name]
   policy_arn = data.aws_iam_policy.CloudWatchAgentPolicy.arn
 }
