@@ -78,5 +78,6 @@ sudo systemctl enable grafana-server.service
 sudo mkdir /etc/dashboards
 sudo aws s3 cp s3://grafana-files-sg/cw.yaml /etc/grafana/provisioning/datasources/cw-data-source.yaml
 sudo aws s3 cp s3://grafana-files-sg/ec2_dashboard.json /etc/dashboards/ec2_dashboard.json
+sudo aws s3 cp s3://grafana-files-sg/rds_dashboard.json /etc/dashboards/rds_dashboard.json
 sudo aws s3 cp s3://grafana-files-sg/ec2_db.yaml /etc/grafana/provisioning/dashboards/ec2_db.yaml
 sudo systemctl restart grafana-server
