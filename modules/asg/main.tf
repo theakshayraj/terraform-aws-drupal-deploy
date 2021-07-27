@@ -20,6 +20,30 @@ resource "aws_key_pair" "generated_key" {
     command = "chmod 400 ./instance-key.pem"
   }
 }
+
+resource "aws_iam_role" "drupal_access_role" {
+  name               = "drupal_access_role"
+  assume_role_policy = file("./modules/asg/policies/assume_role_policy.json")
+}
+
+resource "aws_iam_instance_profile" "drupal_profile" {
+  name = "drupal_profile"
+  role = aws_iam_role.drupal_access_role.name
+}
+
+resource "aws_iam_policy" "cloudwatchagentserver-policy" {
+  name        = "cloudwatchagentserver-policy"
+  description = "cloudwatch agent server policy"
+  policy      = file("./modules/asg/policies/CloudwatchAgentServerPolicy.json")
+}
+
+resource "aws_iam_policy_attachment" "cloudwatchagentserver-attach" {
+  name       = "cloudwatchagentserver-attachment"
+  roles      = [aws_iam_role.drupal_access_role.name]
+  policy_arn = aws_iam_policy.cloudwatchagentserver-policy.arn
+}
+
+
 module "aws_autoscaling_group" {
   #source = "git@github.com:terraform-aws-modules/terraform-aws-autoscaling.git?ref=v4.1.0"
 
@@ -52,7 +76,7 @@ module "aws_autoscaling_group" {
 
   image_id      = "ami-0dc2d3e4c0f9ebd18"
   instance_type = "t2.micro"
-
+  iam_instance_profile = aws_iam_instance_profile.drupal_profile.name
   key_name      = "instance-key"
   #user_data_base64 = base64encode(local.user_data)
   user_data_base64 = base64encode(templatefile("${path.module}/userdata.sh", {
