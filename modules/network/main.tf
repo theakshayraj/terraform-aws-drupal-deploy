@@ -1,4 +1,3 @@
-
 locals {
   name = "group-vpc"
 }
@@ -6,21 +5,19 @@ locals {
 module "vpc" {
   source  = "terraform-aws-modules/vpc/aws"
   version = "3.2.0"
- 
-  name = local.name
-  cidr = "10.99.0.0/18"
 
-  azs             = ["us-east-1a", "us-east-1b", "us-east-1c"]
-  public_subnets  = ["10.99.0.0/24", "10.99.1.0/24", "10.99.2.0/24"]
-  private_subnets = ["10.99.3.0/24", "10.99.4.0/24", "10.99.5.0/24"]
+  name = local.name
+  cidr = var.cidr_vpc
+
+  azs             = var.az_vpc
+  public_subnets  = var.pub_sub_vpc
+  private_subnets = var.pri_sub_vpc
 
   enable_dns_hostnames = true
   enable_dns_support   = true
 }
 
 module "security_group_asg" {
-  #source = "git@github.com:terraform-aws-modules/terraform-aws-security-group.git?ref=v4.0.0"
-
   source  = "terraform-aws-modules/security-group/aws"
   version = "4.0.0"
 
@@ -110,7 +107,6 @@ module "security_group_asg" {
 }
 
 module "security_group_rds" {
-  #source = "git@github.com:terraform-aws-modules/terraform-aws-security-group.git?ref=v4.0.0"
   source  = "terraform-aws-modules/security-group/aws"
   version = "4.0.0"
   name   = "security-group_rds"
