@@ -31,16 +31,25 @@ resource "aws_iam_instance_profile" "drupal-grp_profile" {
   role = aws_iam_role.drupal_access_role.name
 }
 
-resource "aws_iam_policy" "cloudwatchagentserver-policy" {
-  name        = "cloudwatchagentserver-policy"
-  description = "cloudwatch agent server policy"
-  policy      = file("./modules/asg/policies/CloudwatchAgentServerPolicy.json")
+# resource "aws_iam_policy" "cloudwatchagentserver-policy" {
+#   name        = "cloudwatchagentserver-policy"
+#   description = "cloudwatch agent server policy"
+#   policy      = file("./modules/asg/policies/CloudwatchAgentServerPolicy.json")
+# }
+
+# resource "aws_iam_policy_attachment" "cloudwatchagentserver-attach" {
+#   name       = "cloudwatchagentserver-attachment"
+#   roles      = [aws_iam_role.drupal_access_role.name]
+#   policy_arn = aws_iam_policy.cloudwatchagentserver-policy.arn
+# }
+
+data "aws_iam_policy" "CloudWatchAgentPolicy" {
+  arn = "arn:aws:iam::aws:policy/CloudWatchAgentServerPolicy"
 }
 
-resource "aws_iam_policy_attachment" "cloudwatchagentserver-attach" {
-  name       = "cloudwatchagentserver-attachment"
-  roles      = [aws_iam_role.drupal_access_role.name]
-  policy_arn = aws_iam_policy.cloudwatchagentserver-policy.arn
+resource "aws_iam_policy_attachment" "cloudwatch-agent-server-policy-attach" {
+  roles       = [aws_iam_role.drupal_access_role.name]
+  policy_arn = data.aws_iam_policy.CloudWatchAgentPolicy.arn
 }
 
 resource "aws_iam_policy" "cw-s3-policy" {
