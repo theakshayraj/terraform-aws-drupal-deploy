@@ -28,7 +28,7 @@ module "alb" {
 
 module "monitoring" {
   source = "./modules/monitoring/"
-  rds_point     = module.alb.dns
+  lb_dns     = module.alb.dns
   depends_on    = [module.alb.dns]
   subnet_monitoring_instance = module.network.public_sn_asg[0]
   vpc_security_group_monitoring = module.network.security_group_id_asg
