@@ -15,12 +15,11 @@
   "editable": true,
   "gnetId": null,
   "graphTooltip": 0,
-  "id": 7,
-  "iteration": 1627466087183,
+  "iteration": 1627505644743,
   "links": [],
   "panels": [
     {
-      "datasource": "Prometheus-1",
+      "datasource": "${datasource}",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -101,7 +100,7 @@
       "type": "timeseries"
     },
     {
-      "datasource": "Prometheus-1",
+      "datasource": "${datasource}",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -160,7 +159,7 @@
       "type": "stat"
     },
     {
-      "datasource": "Prometheus-1",
+      "datasource": "${datasource}",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -219,7 +218,7 @@
       "type": "stat"
     },
     {
-      "datasource": "Prometheus-1",
+      "datasource": "${datasource}",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -285,9 +284,9 @@
     "list": [
       {
         "current": {
-          "selected": true,
-          "text": "Prometheus-1",
-          "value": "Prometheus-1"
+          "selected": false,
+          "text": "Prometheus-provision",
+          "value": "Prometheus-provision"
         },
         "description": null,
         "error": null,
