@@ -6,7 +6,7 @@
 	 packer validate packer.json
 
  build:
-	 packer build -debug  packer.json
+	 packer build -debug packer.json
 
  init:
 	 terraform init
