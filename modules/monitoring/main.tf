@@ -72,9 +72,11 @@ resource "aws_iam_policy_attachment" "s3-attach" {
 }
 
 resource "aws_instance" "terraform-test-2" {
-	ami = "ami-0dc2d3e4c0f9ebd18"
-	instance_type = "t2.micro"
-	user_data = file("./modules/monitoring/user-data.sh")
+  ami = "ami-0dc2d3e4c0f9ebd18"
+  instance_type = "t2.micro"
+  user_data_base64 = base64encode(templatefile("./modules/monitoring/userdata.sh", {
+    dns_name = var.lb_dns
+  }))
   iam_instance_profile = aws_iam_instance_profile.cw-grp_profile.name
   key_name = "monitoring-key"
   subnet_id = var.subnet_monitoring_instance
