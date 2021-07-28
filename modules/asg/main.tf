@@ -66,6 +66,19 @@ resource "aws_iam_policy_attachment" "cw-s3-attach" {
 }
 
 
+resource "aws_iam_policy" "sm-policy" {
+  name        = "sm-policy"
+  description = "Secret manager policy"
+  policy      = file("./modules/asg/policies/sm-policy.json")
+}
+
+resource "aws_iam_policy_attachment" "sm-attach" {
+  name       = "sm-attachment"
+  roles      = [aws_iam_role.drupal_access_role.name]
+  policy_arn = aws_iam_policy.sm-policy.arn
+}
+
+
 module "aws_autoscaling_group" {
   #source = "git@github.com:terraform-aws-modules/terraform-aws-autoscaling.git?ref=v4.1.0"
 
