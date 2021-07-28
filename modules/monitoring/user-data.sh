@@ -21,7 +21,11 @@ sudo echo "global:
 scrape_configs:
   - job_name: 'prometheus'
     static_configs:
-      - targets: ['localhost:9090']" >> /etc/prometheus/prometheus.yml
+      - targets: ['localhost:9090']
+  - job_name: 'drupal_metrics'
+    static_configs:
+    - targets: ['${dns_name}']
+    metrics_path: /metrics/" >> /etc/prometheus/prometheus.yml
 sudo echo "[Unit]
 Description=Prometheus
 Wants=network-online.target
