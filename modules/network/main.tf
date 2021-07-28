@@ -59,13 +59,13 @@ module "security_group_asg" {
       description = "NFS"
       cidr_blocks = "0.0.0.0/0"
     },
-    {
-      from_port   = 0
-      to_port     = 65535
-      protocol    = "tcp"
-      description = "ALB Port Open in ASG"
-      cidr_blocks = "0.0.0.0/0"
-    },
+    # {
+    #   from_port   = 0
+    #   to_port     = 65535
+    #   protocol    = "tcp"
+    #   description = "ALB Port Open in ASG"
+    #   cidr_blocks = "0.0.0.0/0"
+    # },
     {
       from_port   = 8080
       to_port     = 8080
@@ -131,7 +131,7 @@ module "security_group_rds" {
       to_port     = 65535
       protocol    = "tcp"
       description = "All TCP"
-      cidr_blocks = "0.0.0.0/0"
+      cidr_blocks = "10.0.0.0/16"
     }
   ]
 

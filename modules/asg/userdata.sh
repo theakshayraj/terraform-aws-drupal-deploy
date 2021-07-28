@@ -1,33 +1,26 @@
 #!/bin/bash
 sudo yum update -y
+sudo yum install -y jq
+sudo tee /etc/yum.repos.d/mariadb.repo<<EOF
+[mariadb]
+name = MariaDB
+baseurl = http://yum.mariadb.org/10.5/centos7-amd64
+gpgkey=https://yum.mariadb.org/RPM-GPG-KEY-MariaDB
+gpgcheck=1
+EOF
+sudo yum makecache
+sudo yum repolist 
+sudo yum install -y MariaDB-server MariaDB-client
+sudo systemctl start mariadb
+sudo systemctl enable --now mariadb
 
-# sudo amazon-linux-extras install nginx1 -y
-# sudo systemctl stop nginx.service
-# sudo systemctl start nginx.service
-# sudo systemctl enable nginx.service
-
-# sudo tee /etc/yum.repos.d/mariadb.repo<<EOF
-# [mariadb]
-# name = MariaDB
-# baseurl = http://yum.mariadb.org/10.5/centos7-amd64
-# gpgkey=https://yum.mariadb.org/RPM-GPG-KEY-MariaDB
-# gpgcheck=1
-# EOF
-# sudo yum makecache
-# sudo yum repolist 
-# sudo yum install -y MariaDB-server MariaDB-client
-# sudo systemctl start mariadb
-# sudo systemctl enable --now mariadb
-
-# sudo amazon-linux-extras enable php7.4
-# sudo yum clean metadata
-sudo yum install -y php php-{pear,cgi,common,curl,mbstring,gd,mysqlnd,gettext,bcmath,json,xml,fpm,intl,zip,imap}
 sudo yum install -y php-dom php-gd php-simplexml php-xml php-opcache php-mbstring php-pgsql
 sudo amazon-linux-extras enable php7.4
 
 x=$(echo "${rds_endpt}" | cut -d':' -f1)
-sudo mysql -u root -pdrupalpass "$x" -e "CREATE DATABASE drupal; CREATE USER 'drupaluser'@'localhost' IDENTIFIED BY 'drupalpass'; GRANT ALL  ON drupal.* TO 'drupaluser'@'localhost' IDENTIFIED BY 'drupalpass' WITH GRANT OPTION; FLUSH PRIVILEGES; EXIT;"
-# sudo mysql -u root -e "CREATE DATABASE drupal; CREATE USER 'drupaluser'@'localhost' IDENTIFIED BY 'drupalpass'; GRANT ALL  ON drupal.* TO 'drupaluser'@'localhost' IDENTIFIED BY 'drupalpass' WITH GRANT OPTION; FLUSH PRIVILEGES; EXIT;"
+echo $x
+#x=$(echo "mysql-group-source.cidzn5agoxhc.us-east-1.rds.amazonaws.com")
+sudo mysql -h "$x" -P 3306 -u drupaladmin -predhat22 -e "CREATE DATABASE drupal; CREATE USER 'drupaluser'@'%' IDENTIFIED BY 'drupalpass'; GRANT ALL  ON drupal.* TO 'drupaluser'@'%' IDENTIFIED BY 'drupalpass' WITH GRANT OPTION; FLUSH PRIVILEGES; EXIT;"
 
 cd /tmp && wget https://www.drupal.org/download-latest/tar.gz
 sudo tar -zxvf tar*.gz -C /usr/share/nginx/html/ 
@@ -38,7 +31,7 @@ sudo chmod -R 755 /usr/share/nginx/html/
 
 sudo rm /etc/nginx/nginx.*
 
-sudo echo "user nginx;
+echo "user nginx;
 worker_processes auto;
 error_log /var/log/nginx/error.log;
 pid /run/nginx.pid;
@@ -148,14 +141,7 @@ http
       log_not_found off;
     }
   }
-}" > /etc/nginx/nginx.conf
-
-cd /usr/share/nginx/html/drupal/sites/default/
-sudo cp default.settings.php settings.php
-sudo chmod 777 settings.php
-
-cd /usr/share/nginx/html/drupal
-sudo chmod -R 777 sites/
+}" | sudo tee /etc/nginx/nginx.conf
 
 sudo systemctl restart nginx
 
@@ -164,7 +150,7 @@ sudo php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');"
 sudo php -r "if (hash_file('sha384', 'composer-setup.php') === '756890a4488ce9024fc62c56153228907f1545c228516cbf63f885e036d37e9a59d27d63f46af1d4d07ee0f76181c7d3') { echo 'Installer verified'; } else { echo 'Installer corrupt'; unlink('composer-setup.php'); } echo PHP_EOL;"
 sudo php composer-setup.php
 sudo ./composer.phar require --dev drush/drush --no-interaction
-sudo ./vendor/bin/drush site-install standard --db-url=mysql://drupaluser:drupalpass@localhost/drupal --site-name=Example --account-name=drupal --account-pass=drupalpass --yes
+sudo ./vendor/bin/drush site-install standard --db-url=mysql://drupaluser:drupalpass@"$x"/drupal --site-name=Example --account-name=drupal --account-pass=drupalpass --yes
 sudo chmod 755 sites/ themes/ profiles/ modules/ vendor/ core/
 sudo chmod -R 777 sites/default/files/
 sudo ./vendor/bin/drush -y config-set system.performance css.preprocess 0
@@ -179,12 +165,8 @@ sudo touch /usr/share/collectd/types.db
 sudo /opt/aws/amazon-cloudwatch-agent/bin/amazon-cloudwatch-agent-ctl -a fetch-config -m ec2 -s -c file:/opt/aws/amazon-cloudwatch-agent/etc/amazon-cloudwatch-agent.json
 sudo systemctl restart amazon-cloudwatch-agent
 
-cd ~
-sudo curl -sS https://getcomposer.org/installer | sudo php
-sudo mv composer.phar /usr/local/bin/composer
-sudo ln -s /usr/local/bin/composer /usr/bin/composer
-cd /usr/share/nginx/html/drupal/
 sudo yum install -y git
-sudo composer require 'drupal/prometheus_exporter:1.x-dev@dev'
-sudo composer require --dev drush/drush
-./vendor/bin/drush en prometheus_exporter
+sudo ./composer.phar require 'drupal/prometheus_exporter:1.x-dev@dev' --no-interaction
+sudo sed -i 's/false/true/g' modules/contrib/prometheus_exporter/config/install/prometheus_exporter.settings.yml
+sudo ./vendor/bin/drush en prometheus_exporter -y
+sudo ./vendor/bin/drush en prometheus_exporter_token_access
