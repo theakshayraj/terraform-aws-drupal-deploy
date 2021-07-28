@@ -7,24 +7,35 @@ locals {
   }
 }
 
+data "aws_secretsmanager_secret" "secrets" {
+  arn = "arn:aws:secretsmanager:us-east-1:750939590519:secret:drupal-master-key-EZYIVZ"
+}
+
+data "aws_secretsmanager_secret_version" "current" {
+  secret_id = data.aws_secretsmanager_secret.secrets.id
+}
+
 module "terraform-aws-rds-source" {
   #source = "git@github.com:terraform-aws-modules/terraform-aws-rds.git?ref=v3.0.0"
   
   source  = "terraform-aws-modules/rds/aws"
   version = "3.0.0"
+  depends_on = [
+    data.aws_secretsmanager_secret_version.current.secret_string
+  ]
 
   identifier = "mysql-group-source"
 
   engine         = "mysql"
   engine_version = "5.7"
-  instance_class = "db.m4.medium"
+  instance_class = "db.t3.medium"
 
   allocated_storage     = 50
   max_allocated_storage = 100
 
   name     = "mydb_source"
-  username = "drupaladmin"
-  password = "redhat22"
+  username = jsondecode(data.aws_secretsmanager_secret_version.current.secret_string)["masteruser"]
+  password = jsondecode(data.aws_secretsmanager_secret_version.current.secret_string)["masterpass"]
   port     = 3306
 
   parameter_group_name      = "default.mysql5.7"
@@ -44,4 +55,5 @@ module "terraform-aws-rds-source" {
 output "rds_endpoint" {
   value = module.terraform-aws-rds-source.db_instance_endpoint
 }
+
 
