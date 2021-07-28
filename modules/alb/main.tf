@@ -52,3 +52,7 @@ module "alb" {
 output "tg" {
   value = module.alb.target_group_arns
 }
+  
+output "dns" {
+  value = module.alb.lb_dns_name
+}
