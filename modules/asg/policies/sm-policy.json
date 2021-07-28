@@ -1,41 +1,18 @@
- {
-
+{
     "Version": "2012-10-17",
-
     "Statement": [
-
         {
-
-            "Action": [
-
-                "secretsmanager:GetSecretValue",
-
-                "ec2:DescribeSecurityGroups",
-
-                "ec2:DescribeSubnets",
-
-                "ec2:DescribeVpcs",
-
-                "kms:DescribeKey",
-
-                "kms:ListAliases",
-
-                "kms:ListKeys",
-
-                "rds:DescribeDBClusters",
-
-                "rds:DescribeDBInstances",
-
-                "tag:GetResources"
-
-            ],
-
+            "Sid": "VisualEditor0",
             "Effect": "Allow",
-
+            "Action": [
+                "secretsmanager:GetRandomPassword",
+                "secretsmanager:GetResourcePolicy",
+                "secretsmanager:GetSecretValue",
+                "secretsmanager:DescribeSecret",
+                "secretsmanager:ListSecretVersionIds",
+                "secretsmanager:ListSecrets"
+            ],
             "Resource": "*"
-
         }
-
     ]
-
 }

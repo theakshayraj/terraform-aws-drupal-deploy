@@ -84,4 +84,6 @@ sudo aws s3 cp s3://grafana-files-sg/cw.yaml /etc/grafana/provisioning/datasourc
 sudo aws s3 cp s3://grafana-files-sg/ec2_dashboard.json /etc/dashboards/ec2_dashboard.json
 sudo aws s3 cp s3://grafana-files-sg/rds_dashboard.json /etc/dashboards/rds_dashboard.json
 sudo aws s3 cp s3://grafana-files-sg/ec2_db.yaml /etc/grafana/provisioning/dashboards/ec2_db.yaml
+sudo aws s3 cp s3://grafana-files-sg/prometheus_ds.yaml /etc/grafana/provisioning/datasources/prometheus_ds.yaml
+sudo aws s3 cp s3://grafana-files-sg/drupal_dashboard.json /etc/dashboards/drupal_dashboard.json
 sudo systemctl restart grafana-server

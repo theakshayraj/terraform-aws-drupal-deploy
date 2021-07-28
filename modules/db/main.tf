@@ -20,9 +20,9 @@ module "terraform-aws-rds-source" {
   
   source  = "terraform-aws-modules/rds/aws"
   version = "3.0.0"
-  depends_on = [
-    data.aws_secretsmanager_secret_version.current.secret_string
-  ]
+  # depends_on = [
+  #   data.aws_secretsmanager_secret_version.current.secret_string
+  # ]
 
   identifier = "mysql-group-source"
 

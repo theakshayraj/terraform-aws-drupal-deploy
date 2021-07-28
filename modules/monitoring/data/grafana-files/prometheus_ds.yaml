@@ -1,0 +1,17 @@
+# config file version
+apiVersion: 1
+
+datasources:
+
+- name: Prometheus-provision
+
+  type: prometheus
+  access: default
+  # <int> org id. will default to orgId 1 if not specified
+  orgId: 1
+  url: http://localhost:9090/
+
+  isDefault: true
+  version: 1
+
+  editable: false

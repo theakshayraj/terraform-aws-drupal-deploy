@@ -20,16 +20,17 @@ sudo amazon-linux-extras enable php7.4
 export AWS_DEFAULT_REGION=us-east-1
 
 secret=$(aws secretsmanager get-secret-value --secret-id sql-key | jq .SecretString | jq fromjson)
-sql_user=$(echo $secret | jq -r .sql-user)
-sql_pass=$(echo $secret | jq -r .sql-pass)
+sql_user=`echo $secret | python -c 'import json,sys;obj=json.load(sys.stdin);print obj["sql-user"]'`
+sql_pass=`echo $secret | python -c 'import json,sys;obj=json.load(sys.stdin);print obj["sql-pass"]'`
 
 secret2=$(aws secretsmanager get-secret-value --secret-id drupal-master-key | jq .SecretString | jq fromjson)
-master_user=$(echo $secret2 | jq -r .masteruser)
-master_pass=$(echo $secret2 | jq -r .masterpass)
+master_user=`echo $secret2 | python -c 'import json,sys;obj=json.load(sys.stdin);print obj["masteruser"]'`
+master_pass=`echo $secret2 | python -c 'import json,sys;obj=json.load(sys.stdin);print obj["masterpass"]'`
 
 x=$(echo "${rds_endpt}" | cut -d':' -f1)
+#x=$(echo "mysql-group-source.cidzn5agoxhc.us-east-1.rds.amazonaws.com")
 echo $x
-sudo mysql -h "$x" -P 3306 -u ${masteruser} -p${masterpass} -e "CREATE DATABASE drupal; CREATE USER '${sql_user}'@'%' IDENTIFIED BY '${sql_pass}'; GRANT ALL  ON drupal.* TO '${sql_user}'@'%' IDENTIFIED BY '${sql_pass}' WITH GRANT OPTION; FLUSH PRIVILEGES; EXIT;"
+sudo mysql -h "$x" -P 3306 -u $master_user -p$master_pass -e "CREATE DATABASE drupal; CREATE USER '$sql_user'@'%' IDENTIFIED BY '$sql_pass'; GRANT ALL  ON drupal.* TO $sql_user@'%' IDENTIFIED BY '$sql_pass' WITH GRANT OPTION; FLUSH PRIVILEGES; EXIT;"
 
 cd /tmp && wget https://www.drupal.org/download-latest/tar.gz
 sudo tar -zxvf tar*.gz -C /usr/share/nginx/html/ 
@@ -155,15 +156,15 @@ http
 sudo systemctl restart nginx
 
 secret3=$(aws secretsmanager get-secret-value --secret-id drupal-login | jq .SecretString | jq fromjson)
-login_user=$(echo $secret3 | jq -r .username)
-login_pass=$(echo $secret3 | jq -r .pass)
+login_user=`echo $secret3 | python -c 'import json,sys;obj=json.load(sys.stdin);print obj["username"]'`
+login_pass=`echo $secret3 | python -c 'import json,sys;obj=json.load(sys.stdin);print obj["pass"]'`
 
 cd /usr/share/nginx/html/drupal/
 sudo php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');"
 sudo php -r "if (hash_file('sha384', 'composer-setup.php') === '756890a4488ce9024fc62c56153228907f1545c228516cbf63f885e036d37e9a59d27d63f46af1d4d07ee0f76181c7d3') { echo 'Installer verified'; } else { echo 'Installer corrupt'; unlink('composer-setup.php'); } echo PHP_EOL;"
 sudo php composer-setup.php
 sudo ./composer.phar require --dev drush/drush --no-interaction
-sudo ./vendor/bin/drush site-install standard --db-url=mysql://drupaluser:drupalpass@"$x"/drupal --site-name=Example --account-name=${login_user} --account-pass=${login_pass} --yes
+sudo ./vendor/bin/drush site-install standard --db-url=mysql://drupaluser:drupalpass@"$x"/drupal --site-name=Example --account-name=$login_user --account-pass=$login_pass --yes
 sudo chmod 755 sites/ themes/ profiles/ modules/ vendor/ core/
 sudo chmod -R 777 sites/default/files/
 sudo ./vendor/bin/drush -y config-set system.performance css.preprocess 0

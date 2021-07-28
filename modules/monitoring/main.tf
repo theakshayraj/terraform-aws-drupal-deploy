@@ -77,7 +77,7 @@ resource "aws_instance" "terraform-test-2" {
   # user_data_base64 = base64encode(templatefile("./modules/monitoring/userdata.sh", {
   #   dns_name = var.lb_dns
   # }))
-  user_data_base64 = base64encode(templatefile("${path.module}/userdata.sh", {
+  user_data_base64 = base64encode(templatefile("${path.module}/user-data.sh", {
     dns_name = var.lb_dns
   }))
   iam_instance_profile = aws_iam_instance_profile.cw-grp_profile.name
