@@ -1,3 +1,7 @@
+variable "lb_dns" {
+
+}
+
 variable "subnet_monitoring_instance" {
 
 }
