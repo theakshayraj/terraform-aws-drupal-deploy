@@ -1,5 +1,3 @@
-access_key = "admin"
-secret_key = "insecurepassword"
 db_user = "drupaladmin"
 db_pass = "redhat22"
 
